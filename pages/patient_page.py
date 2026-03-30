@@ -1,6 +1,9 @@
-from playwright.sync_api import Page, expect
 import re
-
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from playwright.sync_api import Page, expect
+from utils import get_human_first_name, get_human_last_name, get_random_digits
 class PatientPage:
     def __init__(self, page: Page):
         self.page = page
@@ -16,10 +19,14 @@ class PatientPage:
         add_btn.click()
 
         # 1. Personal Information
-        self.page.get_by_role("textbox", name="First Name *").fill("Tamal")
-        self.page.get_by_role("textbox", name="Last Name *").fill("Saha")
-        self.page.locator("#phoneNumber").fill("(016) 708-67710")
-        self.page.get_by_role("textbox", name="Member/Insurance ID Number *").fill("123456789")
+        #self.page.get_by_role("textbox", name="First Name *").fill("Tamal")
+        self.page.get_by_label("First Name").fill(get_human_first_name())
+        #self.page.get_by_role("textbox", name="Last Name *").fill("Saha")
+        self.page.get_by_label("Last Name").fill(get_human_last_name())
+        #self.page.locator("#phoneNumber").fill("(016) 708-67710")
+        self.page.locator("#phoneNumber").fill(get_random_digits(10))
+        #self.page.get_by_role("textbox", name="Member/Insurance ID Number *").fill("123456789")
+        self.page.get_by_label("Member/Insurance ID Number").fill(get_random_digits(10))
         self.page.get_by_role("textbox", name="Medical Code *").fill("T1019")
 
         # 2. Address and Gender
@@ -34,6 +41,8 @@ class PatientPage:
         self.page.get_by_text("1").first.click()
         self.page.get_by_role("textbox", name="Contact Person Name *").fill("Rahul")
         self.page.get_by_role("textbox", name="Contact Person Phone *").fill("(017) 114-75090")
+        #self.page.get_by_label("Contact Person Name").fill(get_random_string(20))
+        #self.page.get_by_label("Contact Person Phone").fill(get_random_digits(10))
 
         # 4. Insurance and Pay Type
         self.page.get_by_role("combobox", name="Select Insurance").click()
@@ -46,16 +55,21 @@ class PatientPage:
         self.page.get_by_text("Bangladesh").click()
 
         # 5. Start and End Date
+        
         self.page.get_by_role("combobox", name="Start Date *").click()
         self.page.get_by_role("button", name="Previous Month").dblclick()
         self.page.get_by_text("1", exact=True).click()
 
         self.page.get_by_role("combobox", name="End Date *").click()
         self.page.get_by_text("31", exact=True).click()
-
+    
+        
+        #print("Authorization dates filled successfully.")
         # 6. Case Worker and Cost
         self.page.get_by_role("textbox", name="Name *", exact=True).fill("Foisal")
+        #self.page.get_by_label("Case worker Name").fill(get_random_string(20))
         self.page.locator("#caseWorkerPhoneNumber").fill("(016) 708-6771")
+        #self.page.get_by_label("Case worker Phone Number").fill(get_random_digits(10))
         self.page.get_by_role("textbox", name="Email *").fill("tamal890@gmail.com")
         self.page.get_by_role("spinbutton", name="Total Units").fill("320")
         self.page.get_by_role("spinbutton", name="Per Unit Cost *").fill("6.75")

@@ -73,8 +73,12 @@ class CaregiverPage:
 
         print("Caregiver created successfully")
         '''
-from playwright.sync_api import Page, expect
 import re
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from playwright.sync_api import Page, expect
+from utils import get_human_first_name, get_human_last_name, get_human_username, get_random_digits
 
 class CaregiverPage:
     def __init__(self, page: Page):
@@ -90,9 +94,12 @@ class CaregiverPage:
         add_btn.click()
 
         # Basic information
-        self.page.get_by_role("textbox", name="First Name *").fill("Stonis")
-        self.page.get_by_role("textbox", name="Last Name *").fill("Steve")
-        self.page.get_by_role("textbox", name="User Name *").fill("stonis123")
+        #self.page.get_by_role("textbox", name="First Name *").fill("Stonis")
+        #self.page.get_by_role("textbox", name="Last Name *").fill("Steve")
+        #self.page.get_by_role("textbox", name="User Name *").fill("stonis123")
+        self.page.get_by_label("First Name").fill(get_human_first_name())
+        self.page.get_by_label("Last Name").fill(get_human_last_name())
+        self.page.get_by_label("User Name").fill(get_human_username())
         self.page.get_by_role("textbox", name="Password *", exact=True).fill("12345678")
         self.page.get_by_role("textbox", name="Confirm Password *").fill("12345678")
 
@@ -103,11 +110,13 @@ class CaregiverPage:
         self.page.get_by_text("1").first.click()
 
         # Phone, email and ID
-        self.page.get_by_role("textbox", name="Phone Number *").fill("(167) 086-7710")
+        #self.page.get_by_role("textbox", name="Phone Number *").fill("(167) 086-7710")
+        self.page.get_by_label("Phone Number").fill(get_random_digits(10))
         self.page.get_by_role("combobox", name="Date Hired *").click()
         self.page.get_by_text("2").nth(1).click()
         self.page.get_by_role("textbox", name="Email *").fill("stonis564@gmail.com")
-        self.page.get_by_role("textbox", name="Social Security Number *").fill("567-81-2340")
+        #self.page.get_by_role("textbox", name="Social Security Number *").fill("567-81-2340")
+        self.page.get_by_label("Social Security Number").fill(get_random_digits(9))
         self.page.get_by_role("textbox", name="Champ's ID Number *").fill("76542092")
         self.page.get_by_role("spinbutton", name="Caregiver's Rate *").fill("20")
 
