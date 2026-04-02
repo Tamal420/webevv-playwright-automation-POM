@@ -1,5 +1,6 @@
 import re
 import sys
+#from datetime import datetime
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from playwright.sync_api import Page, expect
@@ -37,8 +38,18 @@ class PatientPage:
         self.page.get_by_text("Male", exact=True).click()
 
         # 3. Date of Birth and Contact
-        self.page.locator("input[name='dateOfBirth']").click()
-        self.page.get_by_text("1").first.click()
+
+        dob_input = self.page.locator("input[name='dateOfBirth']")
+        dob_input.wait_for(state="visible")
+        dob_input.click()
+        self.page.get_by_role("button", name="Previous Month").click()
+        self.page.wait_for_timeout(300)
+        day_01 = self.page.locator(
+             ".p-datepicker-day:not(.p-datepicker-other-month):has-text('1')"
+        ).first
+        day_01.wait_for(state="visible")
+        day_01.click()
+       
         self.page.get_by_role("textbox", name="Contact Person Name *").fill("Rahul")
         self.page.get_by_role("textbox", name="Contact Person Phone *").fill("(017) 114-75090")
         #self.page.get_by_label("Contact Person Name").fill(get_random_string(20))
@@ -60,9 +71,16 @@ class PatientPage:
         self.page.get_by_role("button", name="Previous Month").dblclick()
         self.page.get_by_text("1", exact=True).click()
 
+        #self.page.get_by_role("combobox", name="End Date *").click()
+        #self.page.get_by_text("31", exact=True).click()
         self.page.get_by_role("combobox", name="End Date *").click()
+        next_month_btn = self.page.get_by_role("button", name="Next Month")
+        while not self.page.get_by_text("December 2026").is_visible():
+            next_month_btn.click()
+            self.page.wait_for_timeout(300)
         self.page.get_by_text("31", exact=True).click()
-    
+        
+
         
         #print("Authorization dates filled successfully.")
         # 6. Case Worker and Cost
@@ -87,5 +105,7 @@ class PatientPage:
         self.page.wait_for_load_state("networkidle")
         
         # Verification (return to patient list)
-        expect(add_btn).to_be_visible()
+        #expect(add_btn).to_be_visible()
+        final_check = self.page.get_by_role("button", name="Add New Patient")
+        expect(final_check).to_be_visible(timeout=10000)
         print("Patient created successfully")

@@ -67,6 +67,6 @@ class LogoutPage:
         self.page.wait_for_url("**/auth/login")
         
         # Check confirmation (optional but professional)
-        # expect(self.page).to_have_url(lambda url: "login" in url)
+     
         expect(self.page).to_have_url("https://d2abiysw3nt2tr.cloudfront.net/auth/login")
         print("Logout successful")
