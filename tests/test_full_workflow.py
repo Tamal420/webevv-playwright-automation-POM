@@ -18,10 +18,19 @@ def test_full_workflow(page):
     page.wait_for_load_state("networkidle")
     patient.create_patient()
     page.wait_for_load_state("networkidle")
+    page.wait_for_selector("table tbody tr")
+    page.wait_for_timeout(3000)
+
     caregiver.create_caregiver()
     page.wait_for_load_state("networkidle")
+    page.wait_for_selector("table tbody tr")
+    page.wait_for_timeout(3000)
+
     appointment.create_appointment()
     page.wait_for_load_state("networkidle")
+    page.wait_for_selector("table tbody tr")
+    page.wait_for_timeout(3000)
+    
     logout.logout()
     page.wait_for_load_state("networkidle")
     

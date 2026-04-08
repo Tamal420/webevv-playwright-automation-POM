@@ -9,15 +9,7 @@ class AppointmentPage:
         self.page.locator("a[href='/appointments']").click()
         self.page.wait_for_load_state("networkidle")
         self.page.get_by_role("button", name="Add new Appointment").click()
-        #1st patient selects from the dropdown
-        #self.page.locator("select[name='patient']").select_option(index=1)
-        #self.page.locator("select[name='caregiver']").select_option(index=1)
-        #self.page.locator("div").filter(has_text=re.compile(r"^Select Patient \*$")).click()
-        #self.page.locator("div.ant-select-item-option-content").first.click()
-
-
-        #self.page.locator("div").filter(has_text=re.compile(r"^Assign Caregiver \*$")).click()
-        #self.page.locator("div.ant-select-item-option-content").first.click()
+      
         patient_dropdown = self.page.locator("p-dropdown[formcontrolname='patientId']")
         patient_dropdown.wait_for(state="visible", timeout=10000)
         patient_dropdown.click()
